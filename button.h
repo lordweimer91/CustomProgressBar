@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  button.h
 //  CustomProgressBar
 //
 //  Created by user on 26.07.18.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UIGestureRecognizerDelegate>
-
+@interface button : UIButton
 
 @end
-

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CEBF7C48210EEB6A003A9F84 /* PushButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBF7C47210EEB6A003A9F84 /* PushButton.m */; };
+		CEBF7C4C210F15DD003A9F84 /* GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBF7C4B210F15DD003A9F84 /* GraphView.m */; };
+		CEBF7C50210F1618003A9F84 /* ContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBF7C4F210F1618003A9F84 /* ContainerView.m */; };
 		CECA469B2109B0260021233B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CECA469A2109B0260021233B /* AppDelegate.m */; };
 		CECA469E2109B0260021233B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CECA469D2109B0260021233B /* ViewController.m */; };
 		CECA46A12109B0260021233B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CECA469F2109B0260021233B /* Main.storyboard */; };
@@ -16,6 +19,7 @@
 		CECA46B32109B0260021233B /* CustomProgressBarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CECA46B22109B0260021233B /* CustomProgressBarTests.m */; };
 		CECA46BE2109B0260021233B /* CustomProgressBarUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = CECA46BD2109B0260021233B /* CustomProgressBarUITests.m */; };
 		CECA46D12109B2710021233B /* PSProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CECA46D02109B2710021233B /* PSProgressBar.m */; };
+		CEFE77DF2109C94A00C8AEF1 /* button.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFE77DE2109C94A00C8AEF1 /* button.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CEBF7C46210EEB6A003A9F84 /* PushButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PushButton.h; sourceTree = "<group>"; };
+		CEBF7C47210EEB6A003A9F84 /* PushButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PushButton.m; sourceTree = "<group>"; };
+		CEBF7C4A210F15DD003A9F84 /* GraphView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphView.h; sourceTree = "<group>"; };
+		CEBF7C4B210F15DD003A9F84 /* GraphView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphView.m; sourceTree = "<group>"; };
+		CEBF7C4E210F1618003A9F84 /* ContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContainerView.h; sourceTree = "<group>"; };
+		CEBF7C4F210F1618003A9F84 /* ContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContainerView.m; sourceTree = "<group>"; };
 		CECA46962109B0260021233B /* CustomProgressBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomProgressBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CECA46992109B0260021233B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CECA469A2109B0260021233B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -54,6 +64,8 @@
 		CECA46BF2109B0260021233B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CECA46CF2109B2700021233B /* PSProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSProgressBar.h; sourceTree = "<group>"; };
 		CECA46D02109B2710021233B /* PSProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSProgressBar.m; sourceTree = "<group>"; };
+		CEFE77DD2109C94A00C8AEF1 /* button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = button.h; sourceTree = "<group>"; };
+		CEFE77DE2109C94A00C8AEF1 /* button.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = button.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,9 +93,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CEBF7C45210EEB3F003A9F84 /* PushButton */ = {
+			isa = PBXGroup;
+			children = (
+				CEBF7C46210EEB6A003A9F84 /* PushButton.h */,
+				CEBF7C47210EEB6A003A9F84 /* PushButton.m */,
+			);
+			path = PushButton;
+			sourceTree = "<group>";
+		};
+		CEBF7C49210F15C3003A9F84 /* GraphView */ = {
+			isa = PBXGroup;
+			children = (
+				CEBF7C4A210F15DD003A9F84 /* GraphView.h */,
+				CEBF7C4B210F15DD003A9F84 /* GraphView.m */,
+			);
+			path = GraphView;
+			sourceTree = "<group>";
+		};
+		CEBF7C4D210F1604003A9F84 /* ContainerView */ = {
+			isa = PBXGroup;
+			children = (
+				CEBF7C4E210F1618003A9F84 /* ContainerView.h */,
+				CEBF7C4F210F1618003A9F84 /* ContainerView.m */,
+			);
+			path = ContainerView;
+			sourceTree = "<group>";
+		};
 		CECA468D2109B0260021233B = {
 			isa = PBXGroup;
 			children = (
+				CEFE77DD2109C94A00C8AEF1 /* button.h */,
+				CEFE77DE2109C94A00C8AEF1 /* button.m */,
 				CECA46982109B0260021233B /* CustomProgressBar */,
 				CECA46B12109B0260021233B /* CustomProgressBarTests */,
 				CECA46BC2109B0260021233B /* CustomProgressBarUITests */,
@@ -104,6 +145,9 @@
 		CECA46982109B0260021233B /* CustomProgressBar */ = {
 			isa = PBXGroup;
 			children = (
+				CEBF7C4D210F1604003A9F84 /* ContainerView */,
+				CEBF7C49210F15C3003A9F84 /* GraphView */,
+				CEBF7C45210EEB3F003A9F84 /* PushButton */,
 				CECA46CB2109B0360021233B /* PSProgressBar */,
 				CECA46992109B0260021233B /* AppDelegate.h */,
 				CECA469A2109B0260021233B /* AppDelegate.m */,
@@ -278,8 +322,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEBF7C50210F1618003A9F84 /* ContainerView.m in Sources */,
 				CECA469E2109B0260021233B /* ViewController.m in Sources */,
+				CEFE77DF2109C94A00C8AEF1 /* button.m in Sources */,
 				CECA46A92109B0260021233B /* main.m in Sources */,
+				CEBF7C48210EEB6A003A9F84 /* PushButton.m in Sources */,
+				CEBF7C4C210F15DD003A9F84 /* GraphView.m in Sources */,
 				CECA469B2109B0260021233B /* AppDelegate.m in Sources */,
 				CECA46D12109B2710021233B /* PSProgressBar.m in Sources */,
 			);
