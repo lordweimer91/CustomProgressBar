@@ -10,19 +10,23 @@
 
 @interface PSProgressBar()
 
-@property (nonatomic, assign) IBInspectable CGFloat lineWidth;
 @property (nonatomic, assign) IBInspectable CGFloat angle;
-@property (nonatomic, strong) IBInspectable UIColor *progressColor;
-@property (nonatomic, strong) IBInspectable UIColor *fontColor;
-@property (nonatomic, strong) IBInspectable UIColor *shapeColor;
-@property (nonatomic, strong) IBInspectable UIColor *borderColor;
-@property (nonatomic, assign) IBInspectable CGFloat borderWidth;
 @property (nonatomic ,assign) IBInspectable CGFloat numberOfSegment;
 
+@property (nonatomic, strong) IBInspectable UIColor *colorProgress;
+@property (nonatomic, strong) IBInspectable UIColor *colorFont;
+@property (nonatomic, strong) IBInspectable UIColor *colorShape;
+@property (nonatomic, strong) IBInspectable UIColor *colorBorder;
+
+@property (nonatomic, assign) IBInspectable CGFloat widthArcKoef;
+@property (nonatomic, assign) IBInspectable CGFloat widthProgressLineKoef;
+@property (nonatomic, assign) IBInspectable CGFloat widthMarkerKoef;
+@property (nonatomic, assign) IBInspectable CGFloat lengthMarkerKoef;
+@property (nonatomic, assign) IBInspectable CGFloat lengthProgressLineKoef;
 @end
 
 @implementation PSProgressBar
-
+/*
 -(UIBezierPath *) createCirclePathWithAngle: (CGFloat) angle
                                   lineWidth: (CGFloat) lineWidth
                                 borderWidth: (CGFloat) borderWidth
@@ -38,7 +42,7 @@
     UIBezierPath *bezierPath = [UIBezierPath new];
     [bezierPath addArcWithCenter: center
                           radius: (MIN(x, y) - (lineWidth / 2.0f) - borderWidth)
-                      startAngle: M_PI_2 + angleRadian + progressAngle
+                      startAngle: M_PI_2 + angleRadian// + progressAngle
                         endAngle: M_PI_2 - angleRadian
                        clockwise: YES];
     if(shapeColor == nil){
@@ -59,53 +63,54 @@
                         endAngle: progressAngle + angleRadian + M_PI_2
                        clockwise: YES];
     [progressColor setStroke];
-    [bezierPath stroke];
+    //[bezierPath stroke];
     
     return bezierPath;
 }
 
--(UIBezierPath *) segmentPathWithSegmentNumber: (NSUInteger) number
+-(void) segmentPathWithSegmentNumber: (NSUInteger) number
                                          angle: (CGFloat) angle
                                          width: (CGFloat) width
                                    borderWidth: (CGFloat) borderWidth
                                    borderColor: (UIColor *) borderColor
+                                          rect: (CGRect) rect
 {
-    const CGFloat kAngleOffset = 0.01f;
-    CGFloat x = CGRectGetMidX(self.bounds);
-    CGFloat y = CGRectGetMidY(self.bounds);
-    CGPoint center = CGPointMake(x, y);
-    CGFloat radius = MIN(x , y) - borderWidth;
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    [borderColor setFill];
+    CGFloat markerSize = 10.0f;
+    UIBezierPath *markerPath = [UIBezierPath bezierPathWithRect:CGRectMake(-borderWidth / 2.0f,
+                                                                           0,
+                                                                           borderWidth,
+                                                                           markerSize)];
+    CGContextTranslateCTM(context, rect.size.width / 2.0f, rect.size.height / 2.0f);
+    
+    CGContextSaveGState(context);
     CGFloat angleRadian = angle * M_PI / 360.0f;
-    UIBezierPath *bezierPath = [UIBezierPath new];
-    [bezierPath addArcWithCenter: center
-                          radius: radius
-                      startAngle: M_PI_2 + angleRadian - kAngleOffset
-                        endAngle: M_PI_2 - angleRadian + kAngleOffset
-                       clockwise: YES];
-    [bezierPath addArcWithCenter: center
-                          radius: radius - width
-                      startAngle: M_PI_2 - angleRadian + kAngleOffset
-                        endAngle: M_PI_2 + angleRadian - kAngleOffset
-                       clockwise: NO];
-    [bezierPath closePath];
+    CGFloat angleDifference = 2.0f * (M_PI - angleRadian);
+    CGFloat arcLengthPerGlass = angleDifference / number;
     
-    for (NSUInteger i = 1; i < number; i++) {
-        CGFloat angleSegment = M_PI_2 - angleRadian - (2.0f * (M_PI - angleRadian) / number * i);
-        CGPoint startPoint = CGPointMake(center.x + ((radius) * cosf(angleSegment)),
-                                         center.y + ((radius) * sinf(angleSegment)));
-        CGPoint endPoint = CGPointMake(center.x + ((radius - width) * cosf(angleSegment)),
-                                       center.y + ((radius - width) * sinf(angleSegment)));
-        [bezierPath moveToPoint: startPoint];
-        [bezierPath addLineToPoint: endPoint];
+    for (NSInteger i = 0; i <= number; i++) {
+        CGContextSaveGState(context);
+        CGFloat angleSegment = arcLengthPerGlass * i  + angleRadian;
+        CGContextRotateCTM(context, angleSegment);
+        CGContextTranslateCTM(context, 0, rect.size.height / 2.0f - markerSize);
+        [markerPath fill];
+        CGContextRestoreGState(context);
     }
-    bezierPath.lineWidth = borderWidth;
-    [borderColor setStroke];
-    [bezierPath stroke];
-    return bezierPath;
+    CGContextRestoreGState(context);
     
+    CGContextSaveGState(context);
+    markerPath = [UIBezierPath bezierPathWithRect:CGRectMake(-borderWidth / 2.0f, 0, borderWidth, width)];
+    CGFloat progressAngle = angleDifference * self.progress + angleRadian;
+    CGContextRotateCTM(context, progressAngle);
+    CGContextTranslateCTM(context, 0, rect.size.height / 2.0f - width);
+    [self.progressColor setFill];
+    [markerPath fill];
+    CGContextRestoreGState(context);
 }
 
--(void)simpleShape
+-(void)simpleShapeInRect:(CGRect) rect
 {
     if(self.lineWidth > (MIN(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds)) / 2.0f)){
         self.lineWidth = MIN(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds)) / 2.0f;
@@ -123,7 +128,8 @@
                                  angle: self.angle
                                  width: self.lineWidth
                            borderWidth: self.borderWidth / 100.0f
-                           borderColor: self.borderColor];
+                           borderColor: self.borderColor
+                                  rect: rect];
     
     CATextLayer *textLayer = [CATextLayer new];
     textLayer.string = [NSString stringWithFormat: @"%0.f", self.progress * 100.0f];
@@ -142,7 +148,7 @@
     }
     [self.layer addSublayer: textLayer];
 }
-
+*/
 -(void) setProgress:(CGFloat)progress
 {
     if(progress > 100){
@@ -150,8 +156,8 @@
     } else if(progress <= 0) {
         progress = 0;
     }
-    _progress = progress / 100.0f;
-    [self setNeedsLayout];
+    _progress = progress;
+    [self setNeedsDisplay];
 }
 
 -(void) setAngle:(CGFloat)angle
@@ -166,7 +172,86 @@
 
 -(void) drawRect:(CGRect)rect
 {
-    [self simpleShape];
+    CGFloat koef = MIN(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    CGFloat widthArc = koef * self.widthArcKoef;
+    
+    CGFloat lengthMarker = koef * self.lengthMarkerKoef;
+    CGFloat lengthProgressLine = koef * self.lengthProgressLineKoef;
+    CGFloat widthProgressLine = koef * self.widthProgressLineKoef;
+    CGFloat widthMarker = koef * self.widthMarkerKoef;
+    
+    CGFloat x = CGRectGetMidX(self.bounds);
+    CGFloat y = CGRectGetMidY(self.bounds);
+    CGPoint center = CGPointMake(x, y);
+    CGFloat angleRadian = self.angle * M_PI / 360.0f;
+    UIBezierPath *bezierPath = [UIBezierPath new];
+    [bezierPath addArcWithCenter: center
+                          radius: (MIN(x, y) - (widthArc / 2.0f))
+                      startAngle: M_PI_2 + angleRadian
+                        endAngle: M_PI_2 - angleRadian
+                       clockwise: YES];
+    if(self.colorShape == nil){
+        [[UIColor colorWithHue: (self.progress / 300.0f)
+                    saturation: 1.0f
+                    brightness: 1.0f
+                         alpha: 1.0f] setStroke];
+    } else {
+        [self.colorShape setStroke];
+    }
+    bezierPath.lineWidth = widthArc;
+    [bezierPath stroke];
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    [self.colorBorder setFill];
+    UIBezierPath *markerPath = [UIBezierPath bezierPathWithRect:CGRectMake(-widthMarker / 2.0f,
+                                                                           0,
+                                                                           widthMarker,
+                                                                           lengthMarker)];
+    CGContextTranslateCTM(context, rect.size.width / 2.0f, rect.size.height / 2.0f);
+    
+    CGContextSaveGState(context);
+    CGFloat angleDifference = 2.0f * (M_PI - angleRadian);
+    CGFloat arcLengthPerGlass = angleDifference / self.numberOfSegment;
+    
+    for (NSInteger i = 0; i <= self.numberOfSegment; i++) {
+        CGContextSaveGState(context);
+        CGFloat angleSegment = arcLengthPerGlass * i  + angleRadian;
+        CGContextRotateCTM(context, angleSegment);
+        CGContextTranslateCTM(context, 0, MIN(rect.size.height, rect.size.width) / 2.0f - lengthMarker);
+        [markerPath fill];
+        CGContextRestoreGState(context);
+    }
+    CGContextRestoreGState(context);
+    
+    CGContextSaveGState(context);
+    markerPath = [UIBezierPath bezierPathWithRect:CGRectMake(-widthProgressLine / 2.0f,
+                                                             0,
+                                                             widthProgressLine,
+                                                             lengthProgressLine)];
+    CGFloat progressAngle = angleDifference * self.progress / 100.0f + angleRadian;
+    CGContextRotateCTM(context, progressAngle);
+    CGContextTranslateCTM(context, 0, MIN(rect.size.height, rect.size.width) / 2.0f - lengthProgressLine);
+    [self.colorProgress setFill];
+    [markerPath fill];
+    CGContextRestoreGState(context);
+    
+    CATextLayer *textLayer = [CATextLayer new];
+    textLayer.string = [NSString stringWithFormat: @"%0.f", self.progress];
+    textLayer.foregroundColor = self.colorFont.CGColor;
+    CGFloat fontSize = (MIN(CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds)) - (widthArc * 2.0f)) / 2.0f;
+    textLayer.frame = CGRectMake(CGRectGetMidX(self.bounds) - fontSize,
+                                 CGRectGetMidY(self.bounds) - (fontSize / 2.0f),
+                                 fontSize * 2.0f,
+                                 fontSize);
+    textLayer.fontSize = fontSize;
+    [textLayer setFont: @"ArialMT"];
+    textLayer.alignmentMode = @"center";
+    
+    if(self.layer.sublayers.count){
+        [[self.layer.sublayers copy] makeObjectsPerformSelector: @selector(removeFromSuperlayer)];
+    }
+    [self.layer addSublayer: textLayer];
 }
 
 @end

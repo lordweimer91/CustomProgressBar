@@ -27,14 +27,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    self.progressBar.progress = 0;
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (IBAction)counterViewTap:(UITapGestureRecognizer *)sender
 {
@@ -56,9 +51,12 @@
 
 - (IBAction)didTapPlusButton:(id)sender
 {
-    [self counterViewTap:nil];
+    self.progressBar.progress ++;
 }
 
-
+- (IBAction)didTapMinusButton:(id)sender
+{
+    self.progressBar.progress--;
+}
 
 @end

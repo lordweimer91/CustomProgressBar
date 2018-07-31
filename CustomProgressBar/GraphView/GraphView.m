@@ -17,11 +17,11 @@
  static  let circleDiameter: CGFloat = 5.0
  */
 
-static const CGFloat margin = 20.0f;
+/*static const CGFloat margin = 20.0f;
 static const CGFloat topBorder = 60.0f;
 static const CGFloat bottomBorder = 50.0f;
 static const CGFloat colorAlpha = 0.0f;
-static const CGFloat circleDiametr = 5.0f;
+static const CGFloat circleDiametr = 5.0f;*/
 static const CGFloat cornerRadius = 10.0f;
 
 
